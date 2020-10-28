@@ -48,6 +48,7 @@ const getUser = (base) => {
   const username = `${firstName.toLowerCase()}.${lastName.toLowerCase()}.${id}`;
   const entry = {
     dn: `uid=${username}, ou=users, ${base}`,
+    objectClass: ['top', 'person', 'inetOrgPerson', 'posixAccount', 'uuidObject'],
     cn: username,
     givenName: firstName,
     sn: lastName,
@@ -56,7 +57,7 @@ const getUser = (base) => {
     homeDirectory: `/home/${username}/`,
     uid: username,
     mail: `${username}@example.org`,
-    objectClass: ['top', 'person', 'inetOrgPerson', 'posixAccount'],
+    uuid: faker.random.uuid(),
   };
   return entry;
 }
@@ -64,11 +65,11 @@ const getUser = (base) => {
 const getGroup = (name, members=[], directory, base) => {
   const entry = {
     dn: `cn=${name}, ${directory}, ${base}`,
-    objectClass: ['top', 'groupOfUniqueNames'],
+    objectClass: ['top', 'groupOfNames'],
     cn: name,
   }
   if (members.length > 0) {
-    entry.uniqueMember = members;
+    entry.member = members;
     return entry;
   }
 }
