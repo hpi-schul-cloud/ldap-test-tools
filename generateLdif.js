@@ -64,11 +64,11 @@ const getUser = (base) => {
 const getGroup = (name, members=[], directory, base) => {
   const entry = {
     dn: `cn=${name}, ${directory}, ${base}`,
-    objectClass: ['top', 'groupOfUniqueNames'],
+    objectClass: ['top', 'groupOfNames'],
     cn: name,
   }
   if (members.length > 0) {
-    entry.uniqueMember = members;
+    entry.member = members;
     return entry;
   }
 }
