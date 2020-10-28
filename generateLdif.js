@@ -30,7 +30,7 @@ const toLdif = ({ dn, changetype = 'add', ...attributes }) => {
 }
 
 const output = (...args) => console.log(...args);
-const outputLdif = (entity) => output(toLdif(entity));
+const outputLdif = (entity) => !!entity ? output(toLdif(entity)) : void 0;
 
 const getDirectory = (name, base) => {
   const entry = {
@@ -64,14 +64,13 @@ const getUser = (base) => {
 const getGroup = (name, members=[], directory, base) => {
   const entry = {
     dn: `cn=${name}, ${directory}, ${base}`,
-    objectClass: ['top', 'posixGroup'],
+    objectClass: ['top', 'groupOfUniqueNames'],
     cn: name,
-    gidNumber: `${getId()}`,
   }
   if (members.length > 0) {
-    entry.memberUid = members;
+    entry.uniqueMember = members;
+    return entry;
   }
-  return entry;
 }
 
 outputLdif({
