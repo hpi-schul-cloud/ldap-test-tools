@@ -48,6 +48,7 @@ const getUser = (base) => {
   const username = `${firstName.toLowerCase()}.${lastName.toLowerCase()}.${id}`;
   const entry = {
     dn: `uid=${username}, ou=users, ${base}`,
+    objectClass: ['top', 'person', 'inetOrgPerson', 'posixAccount', 'uuidObject'],
     cn: username,
     givenName: firstName,
     sn: lastName,
@@ -56,7 +57,7 @@ const getUser = (base) => {
     homeDirectory: `/home/${username}/`,
     uid: username,
     mail: `${username}@example.org`,
-    objectClass: ['top', 'person', 'inetOrgPerson', 'posixAccount'],
+    uuid: faker.random.uuid(),
   };
   return entry;
 }
