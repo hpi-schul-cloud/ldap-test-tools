@@ -1,5 +1,9 @@
 # ldap-test-tools
 
+1. [Generate user data as LDIF](#Generate)
+2. [Startup with docker-compose](#startup)
+3. [Build a container with pre-filled database](#build)
+
 ## Generate user data as LDIF
 
 Data in LDIF format can be used to seed an LDAP server.
@@ -110,16 +114,16 @@ Add these documents to the systems collection and [trigger an LDAP sync](https:/
 
 ## Startup with docker-compose
 
-> Startup of the docker container can take a while, because of the amount of data it have to write to the database
+> Startup of the docker container can take a while, because of the amount of data it has to write to the database
 
-Run `docker-compose up -d` to startup a openldap server with example data to use with Schulcloud-Server.
-The docker-compose file setup also a phpldap admin whitch is reachable via `localhost:8080`
+Run `docker-compose up -d` to startup a OpenLDAP server with sample data to use with Schulcloud-Server.
+The docker-compose file also sets up a phpLDAPAdmin which is reachable via `http://localhost:8080`.
 
-To Login use as user `cn=admin,dn=example,dn=org`, defaul password is `admin`
-The ldap container is creachable via port `389`and `636`
+To Login use as user `cn=admin,dn=example,dn=org`, default password is `admin`
+The LDAP container is reachable via port `389`and `636`.
 
-## Build a Container with pre filed database
+## Build a container with pre-filled database
 
-Run `docker build -t myopenldap .` to create a new docker image with prefiled data. This save time at startup, but already run the first steps like set of the admin password.
+Run `docker build -t myopenldap .` to create a new docker image with pre-filled data. This saves time at startup, but already runs the first steps like set of the admin password, so they cannot be changed later.
 
-The default admin password is `Schulcloud1!`, to change it run build command with arg `LDAP_ADMIN_PASSWORD`: `docker build --build-arg LDAP_ADMIN_PASSWORD=Donky -t myopenldap .`
+The default admin password is `Schulcloud1!`. To change it, run the build command with arg `LDAP_ADMIN_PASSWORD`: `docker build --build-arg LDAP_ADMIN_PASSWORD=Donky -t myopenldap .`
