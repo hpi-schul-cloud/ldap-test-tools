@@ -1,8 +1,8 @@
 # ldap-test-tools
 
-1. [Generate user data as LDIF](#Generate)
-2. [Startup with docker-compose](#startup)
-3. [Build a container with pre-filled database](#build)
+1. [Generate user data as LDIF](#generate-user-data-as-ldif)
+2. [Startup with docker-compose](#startup-with-docker-compose)
+3. [Build a container with pre-filled database](#build-a-container-with-pre-filled-database)
 
 ## Generate user data as LDIF
 
