@@ -45,6 +45,8 @@ To successfully import uuids, the [uuid schema](./schema/uuid.schema) must be im
 
 To connect to the server seeded with that exported data, use one of these templates. Use [this tool](https://docs.hpi-schul-cloud.org/pages/viewpage.action?pageId=132680090) to encrypt the search user password.
 
+Remember to adapt the base path to your chosen base and replace the URL and port. Don't use `ldaps://` with a self-signed certificate.
+
 **iserv-idm**
 ```json
 {
@@ -52,8 +54,8 @@ To connect to the server seeded with that exported data, use one of these templa
     "alias" : "Fake-IServ",
     "ldapConfig" : {
         "provider" : "iserv-idm",
-        "url" : "ldap://127.0.0.1:389", // server url and port. Don't use ldaps:// with a self-signed certificate!
-        "rootPath" : "dc=example,dc=org", // adapt to chosen base path
+        "url" : "ldap://127.0.0.1:389",
+        "rootPath" : "dc=example,dc=org",
         "searchUser" : "cn=admin,dc=example,dc=org",
         "searchUserPassword" : "U2FsdGVkX18OoIinJA2yeskAPGLFqcb0ArdCNoouRrY=",
         "active" : true
@@ -62,20 +64,17 @@ To connect to the server seeded with that exported data, use one of these templa
 ```
 
 **general**
-```
+```json
 {
-	"_id": {
-		"$oid": "5f99628ca2e4da001d9d6157"
-	},
 	"ldapConfig": {
 		"active": true,
-		"url": "ldap://ldap",
+		"url": "ldap://127.0.0.1:389",
 		"rootPath": "o=school0,dc=de,dc=example,dc=org",
 		"searchUser": "cn=admin,dc=example,dc=org",
-		"searchUserPassword": "U2FsdGVkX18LGHSzv8Mk0IvMDwugBUaJS2Q3lulc7UY=",
+		"searchUserPassword": "U2FsdGVkX18OoIinJA2yeskAPGLFqcb0ArdCNoouRrY=",
 		"provider": "general",
 		"providerOptions": {
-			"schoolName": "Paul-Gerhardt-Gymnasium",
+			"schoolName": "Generated School 0",
 			"userPathAdditions": "ou=users",
 			"classPathAdditions": "ou=groups",
 			"roleType": "group",
@@ -83,33 +82,26 @@ To connect to the server seeded with that exported data, use one of these templa
 				"givenName": "givenName",
 				"sn": "sn",
 				"dn": "dn",
-				"uuid": "uidNumber",
+				"uuid": "uuid",
 				"uid": "uid",
 				"mail": "mail",
 				"role": "description"
 			},
 			"roleAttributeNameMapping": {
-				"roleStudent": "cn=students,ou=roles,o=school0,dc=de,dc=example,dc=org",
-				"roleTeacher": "cn=teachers,ou=roles,o=school0,dc=de,dc=example,dc=org",
-				"roleAdmin": "cn=admins,ou=roles,o=school0,dc=de,dc=example,dc=org",
-				"roleNoSc": "cn=ignored,ou=roles,o=school0,dc=de,dc=example,dc=org"
+				"roleStudent": "cn=ROLE_STUDENT,ou=roles,o=school0,dc=de,dc=example,dc=org",
+				"roleTeacher": "cn=ROLE_TEACHER,ou=roles,o=school0,dc=de,dc=example,dc=org",
+				"roleAdmin": "cn=ROLE_ADMIN,ou=roles,o=school0,dc=de,dc=example,dc=org",
+				"roleNoSc": "cn=ROLE_NBC_EXCLUDE,ou=roles,o=school0,dc=de,dc=example,dc=org"
 			},
 			"classAttributeNameMapping": {
 				"description": "cn",
 				"dn": "dn",
-				"uniqueMember": "uniqueMember"
+				"uniqueMember": "member"
 			}
 		}
 	},
 	"type": "ldap",
-	"alias": "Paul-Gerhardt-Gymnasium",
-	"createdAt": {
-		"$date": "2020-10-28T12:22:36.403Z"
-	},
-	"updatedAt": {
-		"$date": "2020-10-28T13:03:21.337Z"
-	},
-	"__v": 0
+	"alias": "LDAP Integration",
 }
 ```
 
