@@ -1,0 +1,24 @@
+name: Test
+
+on: [push]
+
+jobs:
+  integration:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: run git change
+        run: |
+          export DOCKER_NAME=schulcloud/ldap-test
+          docker build \
+            -t $DOCKER_NAME:$DOCKERTAG \
+            -t $DOCKER_NAME:$GIT_SHA \
+            -t $DOCKER_NAME:latest
+            -f Dockerfile.client \
+            .
+          echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login -u ${{ secrets.DOCKERHUB_ID}} --password-stdin
+          # Push Image
+          docker push $DOCKER_NAME:$DOCKERTAG
+          docker push $DOCKER_NAME:$GIT_SHA
+          docker push $DOCKER_NAME:latest
+
