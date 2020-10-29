@@ -93,3 +93,19 @@ node generate.js --help
 ```
 
 > Does not conform to the schema described above!
+
+## Startup with docker-compose
+
+> Startup of the docker container can take a while, because of the amount of data it have to write to the database
+
+Run `docker-compose up -d` to startup a openldap server with example data to use with Schulcloud-Server.
+The docker-compose file setup also a phpldap admin whitch is reachable via `localhost:8080`
+
+To Login use as user `cn=admin,dn=example,dn=org`, defaul password is `admin`
+The ldap container is creachable via port `389`and `636`
+
+## Build a Container with pre filed database
+
+Run `docker build -t myopenldap .` to create a new docker image with prefiled data. This save time at startup, but already run the first steps like set of the admin password.
+
+The default admin password is `Schulcloud1!`, to change it run build command with arg `LDAP_ADMIN_PASSWORD`: `docker build --build-arg LDAP_ADMIN_PASSWORD=Donky -t myopenldap .`
