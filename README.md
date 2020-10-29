@@ -62,8 +62,55 @@ To connect to the server seeded with that exported data, use one of these templa
 ```
 
 **general**
-```json
-tbd
+```
+{
+	"_id": {
+		"$oid": "5f99628ca2e4da001d9d6157"
+	},
+	"ldapConfig": {
+		"active": true,
+		"url": "ldap://ldap",
+		"rootPath": "o=school0,dc=de,dc=example,dc=org",
+		"searchUser": "cn=admin,dc=example,dc=org",
+		"searchUserPassword": "U2FsdGVkX18LGHSzv8Mk0IvMDwugBUaJS2Q3lulc7UY=",
+		"provider": "general",
+		"providerOptions": {
+			"schoolName": "Paul-Gerhardt-Gymnasium",
+			"userPathAdditions": "ou=users",
+			"classPathAdditions": "ou=groups",
+			"roleType": "group",
+			"userAttributeNameMapping": {
+				"givenName": "givenName",
+				"sn": "sn",
+				"dn": "dn",
+				"uuid": "uidNumber",
+				"uid": "uid",
+				"mail": "mail",
+				"role": "description"
+			},
+			"roleAttributeNameMapping": {
+				"roleStudent": "cn=students,ou=roles,o=school0,dc=de,dc=example,dc=org",
+				"roleTeacher": "cn=teachers,ou=roles,o=school0,dc=de,dc=example,dc=org",
+				"roleAdmin": "cn=admins,ou=roles,o=school0,dc=de,dc=example,dc=org",
+				"roleNoSc": "cn=ignored,ou=roles,o=school0,dc=de,dc=example,dc=org"
+			},
+			"classAttributeNameMapping": {
+				"description": "cn",
+				"dn": "dn",
+				"uniqueMember": "uniqueMember"
+			}
+		}
+	},
+	"type": "ldap",
+	"alias": "Paul-Gerhardt-Gymnasium",
+	"createdAt": {
+		"$date": "2020-10-28T12:22:36.403Z"
+	},
+	"updatedAt": {
+		"$date": "2020-10-28T13:03:21.337Z"
+	},
+	"__v": 0
+}
 ```
 
 Add these documents to the systems collection and [trigger an LDAP sync](https://docs.hpi-schul-cloud.org/display/TSC/LDAP+Integration).
