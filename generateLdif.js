@@ -66,6 +66,7 @@ const getGroup = (name, members=[], directory, base) => {
   const entry = {
     dn: `cn=${name}, ${directory}, ${base}`,
     objectClass: ['top', 'groupOfNames'],
+    description: name,
     cn: name,
   }
   if (members.length > 0) {
@@ -86,7 +87,7 @@ for (let schoolId = 0; schoolId < options.numberOfSchools; schoolId += 1) {
   const school = {
     dn: schoolDn,
     objectClass: ['top', 'organization'],
-    o: `school${schoolId}.de`,
+    o: `school${schoolId}`,
   };
 
   outputLdif(school);
@@ -109,10 +110,10 @@ for (let schoolId = 0; schoolId < options.numberOfSchools; schoolId += 1) {
   }
 
   [
-    getGroup('admins', admins, 'ou=roles', schoolDn),
-    getGroup('teachers', teachers, 'ou=roles', schoolDn),
-    getGroup('students', students, 'ou=roles', schoolDn),
-    getGroup('ignored', ignored, 'ou=roles', schoolDn),
+    getGroup('ROLE_ADMIN', admins, 'ou=roles', schoolDn),
+    getGroup('ROLE_TEACHER', teachers, 'ou=roles', schoolDn),
+    getGroup('ROLE_STUDENT', students, 'ou=roles', schoolDn),
+    getGroup('ROLE_NBC_EXCLUDE', ignored, 'ou=roles', schoolDn),
   ].forEach(outputLdif);
 
   const classUsers = teachers.concat(students).concat(ignored);
