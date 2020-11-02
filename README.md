@@ -49,7 +49,7 @@ To successfully import uuids, the [uuid schema](./schema/uuid.schema) must be im
 
 To connect to the server seeded with that exported data, use one of these templates. Use [this tool](https://docs.hpi-schul-cloud.org/pages/viewpage.action?pageId=132680090) to encrypt the search user password.
 
-Remember to adapt the base path to your chosen base and replace the URL and port. Don't use `ldaps://` with a self-signed certificate.
+**Remember to adapt the base path to your chosen base and replace the URL and port.** Don't use `ldaps://` with a self-signed certificate.
 
 **iserv-idm**
 ```json
@@ -98,7 +98,7 @@ Remember to adapt the base path to your chosen base and replace the URL and port
 				"roleNoSc": "cn=ROLE_NBC_EXCLUDE,ou=roles,o=school0,dc=de,dc=example,dc=org"
 			},
 			"classAttributeNameMapping": {
-				"description": "cn",
+				"description": "description",
 				"dn": "dn",
 				"uniqueMember": "member"
 			}
