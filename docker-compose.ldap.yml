@@ -29,8 +29,8 @@ services:
     tty: true
     stdin_open: true
     volumes:
-      - ../data:/container/service/slapd/assets/config/bootstrap/ldif/custom/
-      - ../schema:/container/service/slapd/assets/config/bootstrap/schema/custom/
+      - ./data:/container/service/slapd/assets/config/bootstrap/ldif/custom/
+      - ./schema:/container/service/slapd/assets/config/bootstrap/schema/custom/
       - /var/lib/ldap
       - /etc/ldap/slapd.d
       - /container/service/slapd/assets/certs/
