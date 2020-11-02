@@ -119,7 +119,7 @@ Add these documents to the systems collection and [trigger an LDAP sync](https:/
 Run `docker-compose up -d` to startup a OpenLDAP server with sample data to use with Schulcloud-Server.
 The docker-compose file also sets up a phpLDAPAdmin which is reachable via `http://localhost:8080`.
 
-To Login use as user `cn=admin,dn=example,dn=org`, default password is `admin`
+To Login use as user `cn=admin,dc=example,dc=org`, default password is `admin`
 The LDAP container is reachable via port `389`and `636`.
 
 ## Build a container with pre-filled database
