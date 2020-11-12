@@ -105,7 +105,7 @@ To connect to the server seeded with that exported data, use one of these templa
 		}
 	},
 	"type": "ldap",
-	"alias": "LDAP Integration",
+	"alias": "LDAP Integration"
 }
 ```
 
