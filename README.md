@@ -59,7 +59,7 @@ To connect to the server seeded with that exported data, use one of these templa
     "ldapConfig" : {
         "provider" : "iserv-idm",
         "url" : "ldap://127.0.0.1:389",
-        "rootPath" : "dc=example,dc=org",
+        "rootPath" : "dc=de,dc=example,dc=org",
         "searchUser" : "cn=admin,dc=example,dc=org",
         "searchUserPassword" : "U2FsdGVkX18OoIinJA2yeskAPGLFqcb0ArdCNoouRrY=",
         "active" : true
