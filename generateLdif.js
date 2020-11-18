@@ -6,6 +6,7 @@ args
   .option('numberOfSchools', 'The number of schools to create', 20)
   .option('numberOfUsers', 'The number of users to create (per school)', 1000)
   .option('numberOfClasses', 'the number of classes to create (per school)', 100)
+  .option('percentageOfCollision', 'rate of user reuse a uuid', 0)
 
 const options = args.parse(process.argv);
 
@@ -13,6 +14,39 @@ currentId = 0;
 const getId = () => {
   currentId += 1;
   return currentId;
+}
+
+/////////////////
+/// uuid pool
+/////////////////
+const uuidPool = [];
+const usedUuids = [];
+const generateUuid = () => {
+  const amountOfUser = options.numberOfSchools * options.numberOfUsers;
+  const percentageOfUuids = 1 - options.percentageOfCollision/100;
+  const amountOfUuids = amountOfUser * percentageOfUuids;
+  for (let i = 0; i <= amountOfUuids; i++) {
+    uuidPool.push(faker.random.uuid())
+  }
+}
+
+const getUuid = () => {
+  let uuid;
+  const amountOfUser = options.numberOfClasses * options.numberOfUsers;
+  const increaseChance = (1 - ( uuidPool.length/amountOfUser )) * options.percentageOfCollision;
+  // math.random generate a value between 0 and 1 (exlude 1),
+  // so if if no percentage of reuse is set it will never reuse a number
+  if ((1 > (options.percentageOfCollision + Math.random() + increaseChance) && uuidPool.length !== 0)
+    || usedUuids.length === 0
+  ){
+    uuid = uuidPool.shift()
+    usedUuids.push(uuid);
+  } else {
+    const pos = faker.random.number(usedUuids.length-1)
+    uuid = usedUuids[pos];
+  }
+
+  return uuid;
 }
 
 const toLdif = ({ dn, changetype = 'add', ...attributes }) => {
@@ -57,7 +91,7 @@ const getUser = (base) => {
     homeDirectory: `/home/${username}/`,
     uid: username,
     mail: `${username}@example.org`,
-    uuid: faker.random.uuid(),
+    uuid: getUuid(),
   };
   return entry;
 }
@@ -80,6 +114,8 @@ outputLdif({
   dc: 'de',
   objectClass: ['top', 'domain'],
 })
+
+generateUuid();
 
 for (let schoolId = 0; schoolId < options.numberOfSchools; schoolId += 1) {
   const schoolDn = `o=school${schoolId}, dc=de, ${options.basePath}`;
