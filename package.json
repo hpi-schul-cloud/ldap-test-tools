@@ -1,16 +1,15 @@
 {
-  "name": "generator",
+  "name": "ldap-test-tools",
   "version": "1.0.0",
   "description": "",
   "main": "generate.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "private": true,
+  "scripts": {},
   "author": "",
   "license": "ISC",
   "dependencies": {
     "args": "^5.0.1",
     "faker": "^4.1.0",
-    "ldapts": "^2.5.1"
+    "ldapts": "^2.8.1"
   }
 }

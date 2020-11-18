@@ -2,7 +2,7 @@ FROM osixia/openldap:stable
 
 ENV SCHEMA_PATH=/container/service/slapd/assets/config/bootstrap/schema/custom/
 ENV DATA_PATH=/container/service/slapd/assets/config/bootstrap/ldif/custom/
-ENV LDAP_ADMIN_PASSWORD="Schulcloud1!"
+ARG LDAP_ADMIN_PASSWORD="Schulcloud1!"
 
 COPY ./data/ ${DATA_PATH}
 COPY ./schema/ ${SCHEMA_PATH}
