@@ -25,12 +25,13 @@ const options = args.parse(process.argv);
     }
   })
 
-  // test sympel numbers and if they are greater as 0
+  // simple test numbers and if they are greater as 0
   const numberOptions = ['numberOfSchools', 'numberOfUsers', 'numberOfClasses'];
   numberOptions.forEach((optionName) => {
     if(options[optionName]){
       const value = Number(options[optionName]);
-      if(value < 0) throw new Error(`Value of --${optionName} have to be a positiv number`)
+      if(value < 0) throw new Error(`Value of --${optionName} must be a non-negative number`)
+
     }
   })
 
