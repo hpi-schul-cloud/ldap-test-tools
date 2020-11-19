@@ -21,22 +21,26 @@ const getId = () => {
 /////////////////
 const uuidPool = [];
 const usedUuids = [];
-const generateUuid = () => {
+(function generateUuid() {
   const amountOfUser = options.numberOfSchools * options.numberOfUsers;
   const percentageOfUuids = 1 - options.percentageOfCollision/100;
   const amountOfUuids = amountOfUser * percentageOfUuids;
   for (let i = 0; i <= amountOfUuids; i++) {
     uuidPool.push(faker.random.uuid())
   }
-}
+})();
 
 const getUuid = () => {
+  if(Number(options.percentageOfCollision) === 0) return uuidPool.shift();
+
   let uuid;
   const amountOfUser = options.numberOfClasses * options.numberOfUsers;
-  const increaseChance = (1 - ( uuidPool.length/amountOfUser )) * options.percentageOfCollision;
+  const percentage = options.percentageOfCollision/100
+  // increase by time to increase the change to reuse a uuid
+  const increaseChance = (1 - ( uuidPool.length/amountOfUser )) * percentage;
   // math.random generate a value between 0 and 1 (exlude 1),
   // so if if no percentage of reuse is set it will never reuse a number
-  if ((1 > (options.percentageOfCollision + Math.random() + increaseChance) && uuidPool.length !== 0)
+  if ((1 > (percentage + Math.random() + increaseChance) && uuidPool.length !== 0)
     || usedUuids.length === 0
   ){
     uuid = uuidPool.shift()
@@ -114,8 +118,6 @@ outputLdif({
   dc: 'de',
   objectClass: ['top', 'domain'],
 })
-
-generateUuid();
 
 for (let schoolId = 0; schoolId < options.numberOfSchools; schoolId += 1) {
   const schoolDn = `o=school${schoolId}, dc=de, ${options.basePath}`;
