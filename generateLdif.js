@@ -6,13 +6,86 @@ args
   .option('numberOfSchools', 'The number of schools to create', 20)
   .option('numberOfUsers', 'The number of users to create (per school)', 1000)
   .option('numberOfClasses', 'the number of classes to create (per school)', 100)
+  .option('percentageOfCollision', 'rate of reuse a user uuid', 0)
 
 const options = args.parse(process.argv);
+
+
+(function validateOptions() {
+
+  // Source: https://stackoverflow.com/questions/9289357/javascript-regular-expression-for-dn
+  const regexForLdapValidation = /^(?:[A-Za-z][\w-]*|\d+(?:\.\d+)*)=(?:#(?:[\dA-Fa-f]{2})+|(?:[^,=\+<>#;\\"]|\\[,=\+<>#;\\"]|\\[\dA-Fa-f]{2})*|"(?:[^\\"]|\\[,=\+<>#;\\"]|\\[\dA-Fa-f]{2})*")(?:\+(?:[A-Za-z][\w-]*|\d+(?:\.\d+)*)=(?:#(?:[\dA-Fa-f]{2})+|(?:[^,=\+<>#;\\"]|\\[,=\+<>#;\\"]|\\[\dA-Fa-f]{2})*|"(?:[^\\"]|\\[,=\+<>#;\\"]|\\[\dA-Fa-f]{2})*"))*(?:(,|;;)(?:[A-Za-z][\w-]*|\d+(?:\.\d+)*)=(?:#(?:[\dA-Fa-f]{2})+|(?:[^,=\+<>#;\\"]|\\[,=\+<>#;\\"]|\\[\dA-Fa-f]{2})*|"(?:[^\\"]|\\[,=\+<>#;\\"]|\\[\dA-Fa-f]{2})*")(?:\+(?:[A-Za-z][\w-]*|\d+(?:\.\d+)*)=(?:#(?:[\dA-Fa-f]{2})+|(?:[^,=\+<>#;\\"]|\\[,=\+<>#;\\"]|\\[\dA-Fa-f]{2})*|"(?:[^\\"]|\\[,=\+<>#;\\"]|\\[\dA-Fa-f]{2})*"))*)*$/
+
+  // test ldap dns
+  const ldapDnOptions = ['basePath'];
+  ldapDnOptions.forEach((optionName) => {
+    if(options[optionName]){
+      const value = options[optionName];
+      if(regexForLdapValidation.test(value)) throw new Error(`Value of --${optionName} is no valid ldap dn`)
+    }
+  })
+
+  // simple test numbers and if they are greater as 0
+  const numberOptions = ['numberOfSchools', 'numberOfUsers', 'numberOfClasses'];
+  numberOptions.forEach((optionName) => {
+    if(options[optionName]){
+      const value = Number(options[optionName]);
+      if(value < 0) throw new Error(`Value of --${optionName} must be a non-negative number`)
+
+    }
+  })
+
+  // check percentage for range
+  const percentageOptions = ['percentageOfCollision'];
+  percentageOptions.forEach((optionName) => {
+    if(options[optionName]){
+      const value = Number(options[optionName]);
+      if(value < 0 || value > 100) throw new Error(`Value of --${optionName} is a percentage value and have to be in the range of 0 and 100 (including 0 and 100)`)
+    }
+  })
+})()
 
 currentId = 0;
 const getId = () => {
   currentId += 1;
   return currentId;
+}
+
+/////////////////
+/// uuid pool
+/////////////////
+const uuidPool = [];
+const usedUuids = [];
+(function generateUuid() {
+  const amountOfUser = options.numberOfSchools * options.numberOfUsers;
+  const percentageOfUuids = 1 - options.percentageOfCollision/100;
+  const amountOfUuids = amountOfUser * percentageOfUuids;
+  for (let i = 0; i <= amountOfUuids; i++) {
+    uuidPool.push(faker.random.uuid())
+  }
+})();
+
+const getUuid = () => {
+  if(Number(options.percentageOfCollision) === 0) return uuidPool.shift();
+
+  let uuid;
+  const amountOfUser = options.numberOfSchools * options.numberOfUsers;
+  const percentage = options.percentageOfCollision/100
+  // increase by time to increase the change to reuse a uuid
+  const increaseChance = (1 - ( uuidPool.length/amountOfUser )) * percentage;
+  // math.random generate a value between 0 and 1 (exlude 1),
+  // so if if no percentage of reuse is set it will never reuse a number
+  if ((1 > (percentage + Math.random() + increaseChance) && uuidPool.length !== 0)
+    || usedUuids.length === 0
+  ){
+    uuid = uuidPool.shift()
+    usedUuids.push(uuid);
+  } else {
+    const pos = faker.random.number(usedUuids.length-1)
+    uuid = usedUuids[pos];
+  }
+
+  return uuid;
 }
 
 const toLdif = ({ dn, changetype = 'add', ...attributes }) => {
@@ -57,7 +130,7 @@ const getUser = (base) => {
     homeDirectory: `/home/${username}/`,
     uid: username,
     mail: `${username}@example.org`,
-    uuid: faker.random.uuid(),
+    uuid: getUuid(),
   };
   return entry;
 }

@@ -122,8 +122,16 @@ The docker-compose file also sets up a phpLDAPAdmin which is reachable via `http
 To Login use as user `cn=admin,dc=example,dc=org`, default password is `admin`
 The LDAP container is reachable via port `389`and `636`.
 
-## Build a container with pre-filled database
+## Build a container 
+
+### Pre-filled database
 
 Run `docker build -t myopenldap .` to create a new docker image with pre-filled data. This saves time at startup, but already runs the first steps like set of the admin password, so they cannot be changed later.
 
-The default admin password is `Schulcloud1!`. To change it, run the build command with arg `LDAP_ADMIN_PASSWORD`: `docker build --build-arg LDAP_ADMIN_PASSWORD=Donky -t myopenldap .`
+The default admin password is `admin`. To change it, run the build command with arg `LDAP_ADMIN_PASSWORD`: `docker build --build-arg LDAP_ADMIN_PASSWORD=Donky -t myopenldap .`
+
+### Generate new data at build
+
+> The data in the container will be differnt at each run
+
+The build supports different arg, that allow to change the data at build time. To build a conatiner with different data you have to set `--build-arg` (e.g. `docker build --build-arg GENERATE_DATA=true --build-arg NUMBER_OF_SCHOOLS=300 -t myopenldap .`). You will find all supported args in the Dockerfile.
