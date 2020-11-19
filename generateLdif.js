@@ -6,7 +6,7 @@ args
   .option('numberOfSchools', 'The number of schools to create', 20)
   .option('numberOfUsers', 'The number of users to create (per school)', 1000)
   .option('numberOfClasses', 'the number of classes to create (per school)', 100)
-  .option('percentageOfCollision', 'rate of user reuse a uuid', 0)
+  .option('percentageOfCollision', 'rate of reuse a user uuid', 0)
 
 const options = args.parse(process.argv);
 
