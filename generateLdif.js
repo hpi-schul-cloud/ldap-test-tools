@@ -10,6 +10,40 @@ args
 
 const options = args.parse(process.argv);
 
+
+(function validateOptions() {
+
+  // Source: https://stackoverflow.com/questions/9289357/javascript-regular-expression-for-dn
+  const regexForLdapValidation = /^(?:[A-Za-z][\w-]*|\d+(?:\.\d+)*)=(?:#(?:[\dA-Fa-f]{2})+|(?:[^,=\+<>#;\\"]|\\[,=\+<>#;\\"]|\\[\dA-Fa-f]{2})*|"(?:[^\\"]|\\[,=\+<>#;\\"]|\\[\dA-Fa-f]{2})*")(?:\+(?:[A-Za-z][\w-]*|\d+(?:\.\d+)*)=(?:#(?:[\dA-Fa-f]{2})+|(?:[^,=\+<>#;\\"]|\\[,=\+<>#;\\"]|\\[\dA-Fa-f]{2})*|"(?:[^\\"]|\\[,=\+<>#;\\"]|\\[\dA-Fa-f]{2})*"))*(?:(,|;;)(?:[A-Za-z][\w-]*|\d+(?:\.\d+)*)=(?:#(?:[\dA-Fa-f]{2})+|(?:[^,=\+<>#;\\"]|\\[,=\+<>#;\\"]|\\[\dA-Fa-f]{2})*|"(?:[^\\"]|\\[,=\+<>#;\\"]|\\[\dA-Fa-f]{2})*")(?:\+(?:[A-Za-z][\w-]*|\d+(?:\.\d+)*)=(?:#(?:[\dA-Fa-f]{2})+|(?:[^,=\+<>#;\\"]|\\[,=\+<>#;\\"]|\\[\dA-Fa-f]{2})*|"(?:[^\\"]|\\[,=\+<>#;\\"]|\\[\dA-Fa-f]{2})*"))*)*$/
+
+  // test ldap dns
+  const ldapDnOptions = ['basePath'];
+  ldapDnOptions.forEach((optionName) => {
+    if(options[optionName]){
+      const value = options[optionName];
+      if(regexForLdapValidation.test(value)) throw new Error(`Value of --${optionName} is no valid ldap dn`)
+    }
+  })
+
+  // test sympel numbers and if they are greater as 0
+  const numberOptions = ['numberOfSchools', 'numberOfUsers', 'numberOfClasses'];
+  numberOptions.forEach((optionName) => {
+    if(options[optionName]){
+      const value = Number(options[optionName]);
+      if(value < 0) throw new Error(`Value of --${optionName} have to be a positiv number`)
+    }
+  })
+
+  // check percentage for range
+  const percentageOptions = ['percentageOfCollision'];
+  percentageOptions.forEach((optionName) => {
+    if(options[optionName]){
+      const value = Number(options[optionName]);
+      if(value < 0 || value > 100) throw new Error(`Value of --${optionName} is a percentage value and have to be in the range of 0 and 100 (including 0 and 100)`)
+    }
+  })
+})()
+
 currentId = 0;
 const getId = () => {
   currentId += 1;
