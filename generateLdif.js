@@ -34,7 +34,7 @@ const getUuid = () => {
   if(Number(options.percentageOfCollision) === 0) return uuidPool.shift();
 
   let uuid;
-  const amountOfUser = options.numberOfClasses * options.numberOfUsers;
+  const amountOfUser = options.numberOfSchools * options.numberOfUsers;
   const percentage = options.percentageOfCollision/100
   // increase by time to increase the change to reuse a uuid
   const increaseChance = (1 - ( uuidPool.length/amountOfUser )) * percentage;
