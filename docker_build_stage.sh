@@ -9,6 +9,7 @@ then
 		--numberOfSchools $NUMBER_OF_SCHOOLS \
 		--numberOfClasses $NUMBER_OF_CLASSES \
 		--numberOfUsers $NUMBER_OF_USERS \
+		--percentageOfCollision $PERCENTAGE_OF_COLLISION \
 		> data/export.ldif
 else
 	mv pre_data data

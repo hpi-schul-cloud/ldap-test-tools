@@ -6,7 +6,7 @@ args
   .option('numberOfSchools', 'The number of schools to create', 20)
   .option('numberOfUsers', 'The number of users to create (per school)', 1000)
   .option('numberOfClasses', 'the number of classes to create (per school)', 100)
-  .option('percentageOfCollision', 'rate of reuse a user uuid', 0)
+  .option('percentageOfCollision', 'rate of reuse a user uuid and email', 0)
 
 const options = args.parse(process.argv);
 
@@ -88,6 +88,11 @@ const getUuid = () => {
   return uuid;
 }
 
+const getEmailWithCollision = (email) => {
+  if(Number(options.percentageOfCollision) === 0) return email;
+  return `${getUuid()}@example.com`;
+}
+
 const toLdif = ({ dn, changetype = 'add', ...attributes }) => {
   dn = dn.replace(/\s/g, '');
   let result = `dn: ${dn}\nchangetype: ${changetype}\n`;
@@ -129,7 +134,7 @@ const getUser = (base) => {
     gidNumber: `${id}`,
     homeDirectory: `/home/${username}/`,
     uid: username,
-    mail: `${username}@example.org`,
+    mail: getEmailWithCollision(`${username}@example.org`),
     uuid: getUuid(),
   };
   return entry;
@@ -155,12 +160,13 @@ outputLdif({
 })
 
 for (let schoolId = 0; schoolId < options.numberOfSchools; schoolId += 1) {
-  const schoolDn = `o=school${schoolId}, dc=de, ${options.basePath}`;
+  const schoolName = `school${schoolId}`;
+  const schoolDn = `o=${schoolName}, dc=de, ${options.basePath}`;
 
   const school = {
     dn: schoolDn,
     objectClass: ['top', 'organization'],
-    o: `school${schoolId}`,
+    o: schoolName,
   };
 
   outputLdif(school);
