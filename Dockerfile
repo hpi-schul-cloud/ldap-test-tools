@@ -27,11 +27,3 @@ COPY --from=builder /ldif_build/data ${DATA_PATH}
 COPY --from=builder /ldif_build/schema/ ${SCHEMA_PATH}
 ARG LDAP_ADMIN_PASSWORD="admin"
 
-### Read data
-# exclude process (-p)
-# keep-startup-env speed up the start of the container but maybe prevent from reading envs
-RUN /container/tool/run -p --copy-service --keep-startup-env
-
-RUN cd ${DATA_PATH} && rm -Rf *.ldif
-
-
