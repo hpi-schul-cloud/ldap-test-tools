@@ -6,7 +6,6 @@ then
 	mkdir data
 	touch export.ldif
 	node generateLdif.js \
-		--basePath "${BASE_PATH}" \
 		--numberOfSchools $NUMBER_OF_SCHOOLS \
 		--numberOfClasses $NUMBER_OF_CLASSES \
 		--numberOfUsers $NUMBER_OF_USERS \
