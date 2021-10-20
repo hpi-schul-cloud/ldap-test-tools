@@ -49,6 +49,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           build-args: |
+            SCHOOL_NAME_BASE=schoolOne
             GENERATE_DATA=true
             NUMBER_OF_SCHOOLS=2
           context: .
