@@ -51,6 +51,7 @@ jobs:
           build-args: |
             BASE_PATH="dc=one, dc=example, dc=org"
             GENERATE_DATA=true
+            NUMBER_OF_SCHOOLS=2
           context: .
           push: true
           tags: ${{ steps.meta.outputs.tags }}
