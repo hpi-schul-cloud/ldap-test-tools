@@ -49,7 +49,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           build-args: |
-            BASE_PATH=dc=one, dc=example, dc=org
+            BASE_PATH="dc=one, dc=example, dc=org"
             GENERATE_DATA=true
             NUMBER_OF_SCHOOLS=2
           context: .
