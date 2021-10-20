@@ -14,6 +14,7 @@ ARG NUMBER_OF_SCHOOLS=19
 ARG NUMBER_OF_USERS=1235
 ARG NUMBER_OF_CLASSES=17
 ARG PERCENTAGE_OF_COLLISION=0
+ARG BASE_PATH=dc=example, dc=org
 
 RUN chmod 750 ./docker_build_stage.sh && ./docker_build_stage.sh
 
