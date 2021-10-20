@@ -161,7 +161,7 @@ outputLdif({
 })
 
 for (let schoolId = 0; schoolId < options.numberOfSchools; schoolId += 1) {
-  const schoolName = `${schoolNameBase}${schoolId}`;
+  const schoolName = `${options.schoolNameBase}${schoolId}`;
   const schoolDn = `o=${schoolName}, dc=de, ${options.basePath}`;
 
   const school = {
