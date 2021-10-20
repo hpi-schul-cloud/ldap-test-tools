@@ -3,7 +3,7 @@ name: Docker for single school ldap sim
 
 on:
   push:
-    branches: [ main ]
+    branches: 
     tags:
       - '*'
   workflow_dispatch:
@@ -53,6 +53,7 @@ jobs:
         with:
           build-args: |
             BASE_PATH="dc=one, dc=example, dc=org"
+            GENERATE_DATA=true
           context: .
           push: true
           tags: ${{ steps.meta.outputs.tags }}
