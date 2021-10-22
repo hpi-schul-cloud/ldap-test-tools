@@ -27,5 +27,6 @@ ENV DATA_PATH=/container/service/slapd/assets/config/bootstrap/ldif/custom/
 
 COPY --from=builder /ldif_build/data ${DATA_PATH}
 COPY --from=builder /ldif_build/schema/ ${SCHEMA_PATH}
+COPY ./data/00_memberOf.ldif ${DATA_PATH}
 ARG LDAP_ADMIN_PASSWORD="admin"
 
