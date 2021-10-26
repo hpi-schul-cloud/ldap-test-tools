@@ -7,6 +7,7 @@ args
   .option('numberOfUsers', 'The number of users to create (per school)', 1000)
   .option('numberOfClasses', 'the number of classes to create (per school)', 100)
   .option('percentageOfCollision', 'rate of reuse a user uuid and email', 0)
+  .option('schoolNameBase', 'The LDAP base path used in the directory', 'school')
 
 const options = args.parse(process.argv);
 
@@ -160,7 +161,7 @@ outputLdif({
 })
 
 for (let schoolId = 0; schoolId < options.numberOfSchools; schoolId += 1) {
-  const schoolName = `school${schoolId}`;
+  const schoolName = `${options.schoolNameBase}${schoolId}`;
   const schoolDn = `o=${schoolName}, dc=de, ${options.basePath}`;
 
   const school = {

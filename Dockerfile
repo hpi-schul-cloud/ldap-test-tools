@@ -14,6 +14,8 @@ ARG NUMBER_OF_SCHOOLS=19
 ARG NUMBER_OF_USERS=1235
 ARG NUMBER_OF_CLASSES=17
 ARG PERCENTAGE_OF_COLLISION=0
+ARG SCHOOL_NAME_BASE=school
+
 
 RUN chmod 750 ./docker_build_stage.sh && ./docker_build_stage.sh
 
@@ -25,5 +27,6 @@ ENV DATA_PATH=/container/service/slapd/assets/config/bootstrap/ldif/custom/
 
 COPY --from=builder /ldif_build/data ${DATA_PATH}
 COPY --from=builder /ldif_build/schema/ ${SCHEMA_PATH}
+COPY ./data/00_memberOf.ldif ${DATA_PATH}
 ARG LDAP_ADMIN_PASSWORD="admin"
 
