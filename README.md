@@ -109,7 +109,11 @@ To connect to the server seeded with that exported data, use one of these templa
 }
 ```
 
-Add these documents to the systems collection and [trigger an LDAP sync](https://docs.hpi-schul-cloud.org/display/TSC/LDAP+Integration).
+You need to replace the searchUserPassword by the LDAP's password encrypted with the `LDAP_PASSWORD_ENCRYPTION_KEY` that you set in your local .env file.<br>
+This repo contains a script to encrypt the secret. Usage is <br>
+`node encrypt.js -e <password> -s <encryption-key>`
+
+To trigger the LDAP sync call `127.0.0.1:3030/sync?target=ldap`. For this call to be authorized you need to set the header `x-api-key` with the value you configured in the var `SYNC_API_KEY`
 
 
 ## Startup with docker-compose
@@ -122,7 +126,7 @@ The docker-compose file also sets up a phpLDAPAdmin which is reachable via `http
 To Login use as user `cn=admin,dc=example,dc=org`, default password is `admin`
 The LDAP container is reachable via port `389`and `636`.
 
-## Build a container 
+## Build a container
 
 ### Pre-filled database
 

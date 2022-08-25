@@ -10,6 +10,7 @@
   "dependencies": {
     "args": "^5.0.1",
     "faker": "^4.1.0",
-    "ldapts": "^2.8.1"
+    "ldapts": "^2.8.1",
+    "crypto-js": "^4.0.0"
   }
 }
