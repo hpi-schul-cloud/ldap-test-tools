@@ -109,11 +109,25 @@ To connect to the server seeded with that exported data, use one of these templa
 }
 ```
 
-You need to replace the searchUserPassword by the LDAP's password encrypted with the `LDAP_PASSWORD_ENCRYPTION_KEY` that you set in your local .env file.<br>
+### Necessary Environment Variables
+You need to have RabbitMQ installed on your machine or running in docker (as you need for automated tests in the server).<br>
+You need to activate RabbitMQ and activate the message consumers for the syncer.<br>
+The passwords to search any LDAPs for users are encrypted. You need to set your encryption key.<br>
+
+So you need the following configuration in you .env file. (Default values that are probably working for you)
+
+```
+FEATURE_RABBITMQ_ENABLED=true
+RABBITMQ_URI=amqp://guest:guest@localhost:5672
+FEATURE_SYNCER_CONSUMER_ENABLE=true
+LDAP_PASSWORD_ENCRYPTION_KEY= <a key of your choice>
+```
+
+You need to replace the `searchUserPassword` in you database by the LDAP's password (default 'admin') encrypted with the `LDAP_PASSWORD_ENCRYPTION_KEY` that you set in your local .env file.<br>
 This repo contains a script to encrypt the secret. Usage is <br>
 `node encrypt.js -e <password> -s <encryption-key>`
 
-To trigger the LDAP sync call `127.0.0.1:3030/sync?target=ldap`. For this call to be authorized you need to set the header `x-api-key` with the value you configured in the var `SYNC_API_KEY`
+To trigger the LDAP sync call `127.0.0.1:3030/sync?target=ldap`. For this call to be authorized you need to set the header `x-api-key` with the value you configured in the var `SYNC_API_KEY`. Default for `SYNC_API_KEY`is 'example'
 
 
 ## Startup with docker-compose
