@@ -29,6 +29,31 @@ node generateLdif.js --help
     --version              Output the version number
 ```
 
+## Startup with docker-compose
+
+> Startup of the docker container can take a while, because of the amount of data it has to write to the database
+
+Run `docker-compose up -d` to startup a OpenLDAP server with sample data to use with Schulcloud-Server.
+The docker-compose file also sets up a phpLDAPAdmin which is reachable via `http://localhost:8080`.
+
+To Login use as user `cn=admin,dc=example,dc=org`, default password is `admin`
+The LDAP container is reachable via port `389`and `636`.
+
+## Build a container
+
+### Pre-filled database
+
+Run `docker build -t myopenldap .` to create a new docker image with pre-filled data. This saves time at startup, but already runs the first steps like set of the admin password, so they cannot be changed later.
+
+The default admin password is `admin`. To change it, run the build command with arg `LDAP_ADMIN_PASSWORD`: `docker build --build-arg LDAP_ADMIN_PASSWORD=Donky -t myopenldap .`
+
+### Generate new data at build
+
+> The data in the container will be differnt at each run
+
+The build supports different arg, that allow to change the data at build time. To build a conatiner with different data you have to set `--build-arg` (e.g. `docker build --build-arg GENERATE_DATA=true --build-arg NUMBER_OF_SCHOOLS=300 -t myopenldap .`). You will find all supported args in the Dockerfile.
+
+
 ### Export structure
 
 The LDAP entities are compatible with the `general`, `iserv`, and `iserv-idm` providers used by the schulcloud-server.
@@ -45,9 +70,27 @@ Each school has all users organized in the `ou=users` directory. `ou=roles` cont
 The data can be used as-is with a server that already has the configured base path nodes. All other nodes will be created in the import process and must not be present.
 To successfully import uuids, the [uuid schema](./schema/uuid.schema) must be imported before importing the generated LDIF. For `memberOf` (required for roles via group membership), the [memberOf overlay](https://www.adimian.com/blog/2014/10/how-to-enable-memberof-using-openldap/) must be active for the `member` attribute on `groupOfNames` nodes on the server before importing the groups.
 
+
+### Necessary Environment Variables
+You need to have RabbitMQ installed on your machine or running in docker (as you need for automated tests in the server).<br>
+You need to activate RabbitMQ and activate the message consumers for the syncer.<br>
+The passwords to search any LDAPs for users are encrypted. You need to set your encryption key.<br>
+
+So you need the following configuration in you .env file. (Default values that are probably working for you)
+
+```
+FEATURE_RABBITMQ_ENABLED=true
+RABBITMQ_URI=amqp://guest:guest@localhost:5672
+FEATURE_SYNCER_CONSUMER_ENABLE=true
+LDAP_PASSWORD_ENCRYPTION_KEY= <a key of your choice>
+```
+
 ### Creating an LDAP configuration
 
-To connect to the server seeded with that exported data, use one of these templates. Use [this tool](https://docs.hpi-schul-cloud.org/pages/viewpage.action?pageId=132680090) to encrypt the search user password.
+Further down you will find two configurations you can use for the LDAP sync. You can add those configurations to the 'system' collection. There is one config for the iserv strategy (for multiple schools) and one config for a single school. Choose the scenario you need or both<br>
+Before adding the configuration in you database you need to replace the `searchUserPassword` by the LDAP's password (default 'admin') encrypted with the `LDAP_PASSWORD_ENCRYPTION_KEY` that you set in your local .env file.<br>
+This repo contains a script to encrypt the secret. Usage is <br>
+`node encrypt.js -e <password> -s <encryption-key>`
 
 **Remember to adapt the base path to your chosen base and replace the URL and port.** Don't use `ldaps://` with a self-signed certificate.
 
@@ -109,47 +152,4 @@ To connect to the server seeded with that exported data, use one of these templa
 }
 ```
 
-### Necessary Environment Variables
-You need to have RabbitMQ installed on your machine or running in docker (as you need for automated tests in the server).<br>
-You need to activate RabbitMQ and activate the message consumers for the syncer.<br>
-The passwords to search any LDAPs for users are encrypted. You need to set your encryption key.<br>
-
-So you need the following configuration in you .env file. (Default values that are probably working for you)
-
-```
-FEATURE_RABBITMQ_ENABLED=true
-RABBITMQ_URI=amqp://guest:guest@localhost:5672
-FEATURE_SYNCER_CONSUMER_ENABLE=true
-LDAP_PASSWORD_ENCRYPTION_KEY= <a key of your choice>
-```
-
-You need to replace the `searchUserPassword` in you database by the LDAP's password (default 'admin') encrypted with the `LDAP_PASSWORD_ENCRYPTION_KEY` that you set in your local .env file.<br>
-This repo contains a script to encrypt the secret. Usage is <br>
-`node encrypt.js -e <password> -s <encryption-key>`
-
 To trigger the LDAP sync call `127.0.0.1:3030/sync?target=ldap`. For this call to be authorized you need to set the header `x-api-key` with the value you configured in the var `SYNC_API_KEY`. Default for `SYNC_API_KEY`is 'example'
-
-
-## Startup with docker-compose
-
-> Startup of the docker container can take a while, because of the amount of data it has to write to the database
-
-Run `docker-compose up -d` to startup a OpenLDAP server with sample data to use with Schulcloud-Server.
-The docker-compose file also sets up a phpLDAPAdmin which is reachable via `http://localhost:8080`.
-
-To Login use as user `cn=admin,dc=example,dc=org`, default password is `admin`
-The LDAP container is reachable via port `389`and `636`.
-
-## Build a container
-
-### Pre-filled database
-
-Run `docker build -t myopenldap .` to create a new docker image with pre-filled data. This saves time at startup, but already runs the first steps like set of the admin password, so they cannot be changed later.
-
-The default admin password is `admin`. To change it, run the build command with arg `LDAP_ADMIN_PASSWORD`: `docker build --build-arg LDAP_ADMIN_PASSWORD=Donky -t myopenldap .`
-
-### Generate new data at build
-
-> The data in the container will be differnt at each run
-
-The build supports different arg, that allow to change the data at build time. To build a conatiner with different data you have to set `--build-arg` (e.g. `docker build --build-arg GENERATE_DATA=true --build-arg NUMBER_OF_SCHOOLS=300 -t myopenldap .`). You will find all supported args in the Dockerfile.
