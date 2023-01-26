@@ -137,6 +137,7 @@ const getUser = (base) => {
     uid: username,
     mail: getEmailWithCollision(`${username}@example.org`),
     uuid: getUuid(),
+    userPassword: 'Schulcloud1!'
   };
   return entry;
 }
