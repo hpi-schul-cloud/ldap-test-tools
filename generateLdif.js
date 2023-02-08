@@ -180,6 +180,22 @@ for (let schoolId = 0; schoolId < options.numberOfSchools; schoolId += 1) {
   const admins = [];
   const ignored = [];
 
+  if (schoolId === 0) {
+    const testUser = getUser(schoolDn);
+    testUser.givenName = 'Laura';
+    testUser.sn = 'Ldapkowski';
+    testUser.uidNumber = '123456';
+    testUser.gidNumber = testUser.uidNumber;
+    testUser.cn = `${testUser.givenName.toLowerCase()}.${testUser.sn.toLowerCase()}.${testUser.uidNumber}`;
+    testUser.homeDirectory = `/home/${testUser.cn}/`;
+    testUser.uid = testUser.cn;
+    testUser.mail = `${testUser.cn}@example.org`;
+    testUser.dn = `uid=${testUser.uid}, ou=users, ${schoolDn}`;
+    testUser.uuid = '7ad7a2aa-907b-4a9c-91ab-5c8f08090277';
+    outputLdif(testUser);
+    students.push(testUser.dn);
+  }
+
   for (let i = 0; i < options.numberOfUsers; i += 1) {
     const user = getUser(schoolDn);
     outputLdif(user);
