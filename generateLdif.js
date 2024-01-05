@@ -177,6 +177,7 @@ for (let schoolId = 0; schoolId < options.numberOfSchools; schoolId += 1) {
 
   const students = [];
   const teachers = [];
+  const substituteTeachers = [];
   const admins = [];
   const ignored = [];
 
@@ -202,6 +203,7 @@ for (let schoolId = 0; schoolId < options.numberOfSchools; schoolId += 1) {
     const r = Math.random();
     if (r < 0.1 && admins.length < 10) { admins.push(user.dn); continue; }
     if (r < 0.1 && ignored.length < 10) { ignored.push(user.dn); continue; }
+    if (r < 0.2 && substituteTeachers.length < 10) { substituteTeachers.push(user.dn); continue; }
     if (r < 0.2) { teachers.push(user.dn); continue; }
     students.push(user.dn);
   }
@@ -209,6 +211,7 @@ for (let schoolId = 0; schoolId < options.numberOfSchools; schoolId += 1) {
   [
     getGroup('ROLE_ADMIN', admins, 'ou=roles', schoolDn),
     getGroup('ROLE_TEACHER', teachers, 'ou=roles', schoolDn),
+    getGroup('ROLE_SUBSTITUTE_TEACHER', teachers, 'ou=roles', schoolDn),
     getGroup('ROLE_STUDENT', students, 'ou=roles', schoolDn),
     getGroup('ROLE_NBC_EXCLUDE', ignored, 'ou=roles', schoolDn),
   ].forEach(outputLdif);
