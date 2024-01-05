@@ -63,7 +63,7 @@ The basic structure looks like this:
 
 On the base path level, the script will create a container `dc=de`, which contains all schools. This emulates the domain handling of the central IServ. When connecting to a server seeded with this data using the `general` or `iserv` strategies, instead of `dc=example,dc=org`, use `o=school0,dc=de,dc=example,dc=org` as base path, to isolate a specific school.
 
-Each school has all users organized in the `ou=users` directory. `ou=roles` contains the four roles `ROLE_ADMIN`, `ROLE_TEACHER`, `ROLE_STUDENT` (does not exist in `iserv` and `iserv-idm`, but is necessary for `general`), and `ROLE_NBC_EXCLUDE` (users who should not be synced). `ou=groups` contains classes, which are constructed with random users (teachers, students, excluded users).
+Each school has all users organized in the `ou=users` directory. `ou=roles` contains the five roles `ROLE_ADMIN`, `ROLE_TEACHER`, `ROLE_SUBSTITUTE_TEACHER`, `ROLE_STUDENT` (does not exist in `iserv` and `iserv-idm`, but is necessary for `general`), and `ROLE_NBC_EXCLUDE` (users who should not be synced). `ou=groups` contains classes, which are constructed with random users (teachers, students, excluded users).
 
 ### Seeding a server
 
@@ -136,7 +136,7 @@ This repo contains a script to encrypt the secret. Usage is <br>
 			},
 			"roleAttributeNameMapping": {
 				"roleStudent": "cn=ROLE_STUDENT,ou=roles,o=school0,dc=de,dc=example,dc=org",
-				"roleTeacher": "cn=ROLE_TEACHER,ou=roles,o=school0,dc=de,dc=example,dc=org",
+				"roleTeacher": "cn=ROLE_TEACHER,ou=roles,o=school0,dc=de,dc=example,dc=org;;cn=ROLE_SUBSTITUTE_TEACHER,ou=roles,o=school0,dc=de,dc=example,dc=org",
 				"roleAdmin": "cn=ROLE_ADMIN,ou=roles,o=school0,dc=de,dc=example,dc=org",
 				"roleNoSc": "cn=ROLE_NBC_EXCLUDE,ou=roles,o=school0,dc=de,dc=example,dc=org"
 			},
