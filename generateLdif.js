@@ -218,7 +218,7 @@ for (let schoolId = 0; schoolId < options.numberOfSchools; schoolId += 1) {
   [
     getGroup('ROLE_ADMIN', admins, 'ou=roles', schoolDn),
     getGroup('ROLE_TEACHER', teachers, 'ou=roles', schoolDn),
-    getGroup('ROLE_SUBSTITUTE_TEACHER', teachers, 'ou=roles', schoolDn),
+    getGroup('ROLE_SUBSTITUTE_TEACHER', substituteTeachers, 'ou=roles', schoolDn),
     getGroup('ROLE_STUDENT', students, 'ou=roles', schoolDn),
     getGroup('ROLE_NBC_EXCLUDE', ignored, 'ou=roles', schoolDn),
   ].forEach(outputLdif);
